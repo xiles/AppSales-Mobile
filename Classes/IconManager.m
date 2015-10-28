@@ -78,32 +78,56 @@
 	[downloadQueue removeObjectAtIndex:0];
 	
 	dispatch_async(queue, ^ {
-		NSString *iconURLStringPNG = [NSString stringWithFormat:@"http://images.appshopper.com/icons/%@/%@.png", [nextAppID substringToIndex:3], [nextAppID substringFromIndex:3]];
-		NSHTTPURLResponse *response = nil;
-		NSError *error = nil;
-		NSData *iconData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:iconURLStringPNG]] returningResponse:&response error:&error];
-		if (!iconData) {
-			response = nil; error = nil;
-			NSString *iconURLStringJPG = [NSString stringWithFormat:@"http://images.appshopper.com/icons/%@/%@.jpg", [nextAppID substringToIndex:3], [nextAppID substringFromIndex:3]];
-			iconData = [NSURLConnection sendSynchronousRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:iconURLStringJPG]] returningResponse:&response error:&error];
-		}
-		UIImage *icon = [UIImage imageWithData:iconData];
-		if (iconData && icon) {
-			dispatch_async(dispatch_get_main_queue(), ^ {
-				//Download was successful, write icon to file
-				NSString *iconPath = [[self iconDirectory] stringByAppendingPathComponent:nextAppID];
-				[iconData writeToFile:iconPath atomically:YES];
-				[iconCache setObject:icon forKey:nextAppID];
-				[[NSNotificationCenter defaultCenter] postNotificationName:IconManagerDownloadedIconNotification object:self userInfo:[NSDictionary dictionaryWithObject:nextAppID forKey:kIconManagerDownloadedIconNotificationAppID]];
-			});
-		} else if (response) {
+        BOOL downloaded = NO;
+        NSString *appURL = [NSString stringWithFormat:@"https://itunes.apple.com/us/app/id%@", nextAppID];
+        NSString *string = [NSString stringWithContentsOfURL:[[NSURL alloc] initWithString:appURL] encoding:NSUTF8StringEncoding error:nil];
+        
+        if (string != nil) {
+            NSRegularExpressionOptions regexOptions = 0;
+            NSRegularExpression* regex = [[NSRegularExpression alloc] initWithPattern:@"http:\\/\\/is[0-9]\\.mzstatic\\.com\\/image\\/thumb\\/([a-zA-Z0-9\\/\\.-]+)\\/source\\/1024x1024sr.jpg" options:regexOptions error:nil];
+            
+            NSTextCheckingResult *match = [regex firstMatchInString:string
+                                                            options:0
+                                                              range:NSMakeRange(0, [string length])];
+            if (match) {
+                if (match.numberOfRanges > 0) {
+                    NSRange subMatchRange = [match rangeAtIndex:1];
+                    
+                    NSString *iconURLString;
+                    
+                    if ([string rangeOfString:@"\"Mac App Store\""].location != NSNotFound) {
+                        iconURLString = [NSString stringWithFormat:@"http://a1.mzstatic.com/us/r30/%@/icon128.png", [string substringWithRange:subMatchRange]];
+                    } else {
+                        iconURLString = [NSString stringWithFormat:@"http://a1.mzstatic.com/us/r30/%@/icon75x75.png", [string substringWithRange:subMatchRange]];
+                    }
+
+                    NSURL *iconURL = [NSURL URLWithString:iconURLString];
+                    
+                    NSData *iconData = [NSData dataWithContentsOfURL:iconURL];
+                    if (iconData != nil) {
+                        UIImage *icon = [UIImage imageWithData:iconData];
+                        if (icon != nil) {
+                            downloaded = YES;
+                            //Download was successful, write icon to file
+                            NSString *iconPath = [[self iconDirectory] stringByAppendingPathComponent:nextAppID];
+                            [iconData writeToFile:iconPath atomically:YES];
+                            [iconCache setObject:icon forKey:nextAppID];
+                            [[NSNotificationCenter defaultCenter] postNotificationName:IconManagerDownloadedIconNotification object:self userInfo:[NSDictionary dictionaryWithObject:nextAppID forKey:kIconManagerDownloadedIconNotificationAppID]];
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (downloaded == NO) {
 			dispatch_async(dispatch_get_main_queue(), ^ {
 				//There was a response, but the download was not successful, write the default icon, so that we won't try again and again...
 				NSString *defaultIconPath = [[NSBundle mainBundle] pathForResource:@"GenericApp" ofType:@"png"];
 				NSString *iconPath = [[self iconDirectory] stringByAppendingPathComponent:nextAppID];
 				[[NSFileManager defaultManager] copyItemAtPath:defaultIconPath toPath:iconPath error:NULL];
 			});
-		}
+        }
+        
 		dispatch_async(dispatch_get_main_queue(), ^ {
 			isDownloading = NO;
 			[self dequeueDownload];
