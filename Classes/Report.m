@@ -160,7 +160,10 @@
 		Product *product = [productsBySKU objectForKey:productSKU];
 		if (!product) {
 			product = [NSEntityDescription insertNewObjectForEntityForName:@"Product" inManagedObjectContext:moc];
-			product.parentSKU = [rowDictionary objectForKey:kReportColumnParentIdentifier];
+            product.parentSKU = [rowDictionary objectForKey:kReportColumnParentIdentifier];
+            if (product.parentSKU != nil) {
+                product.parentSKU = [product.parentSKU stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+            }
 			product.account = account;
 			product.productID = [rowDictionary objectForKey:kReportColumnAppleIdentifier];
 			product.SKU = productSKU;
