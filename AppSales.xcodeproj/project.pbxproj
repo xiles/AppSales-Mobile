@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1918E9751BE0A15D002E3EA9 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1918E9741BE0A15D002E3EA9 /* Launch Screen.storyboard */; };
 		6D81575414CB3C2B005E8F3F /* KKKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D81574914CB3C2B005E8F3F /* KKKeychain.m */; };
 		6D81575514CB3C2B005E8F3F /* KKPasscodeLock.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D81574B14CB3C2B005E8F3F /* KKPasscodeLock.m */; };
 		6D81575614CB3C2B005E8F3F /* KKPasscodeSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D81574D14CB3C2B005E8F3F /* KKPasscodeSettingsViewController.m */; };
@@ -625,6 +626,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1918E9741BE0A15D002E3EA9 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../Launch Screen.storyboard"; sourceTree = "<group>"; };
 		6D81574814CB3C2B005E8F3F /* KKKeychain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKKeychain.h; sourceTree = "<group>"; };
 		6D81574914CB3C2B005E8F3F /* KKKeychain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KKKeychain.m; sourceTree = "<group>"; };
 		6D81574A14CB3C2B005E8F3F /* KKPasscodeLock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KKPasscodeLock.h; sourceTree = "<group>"; };
@@ -1433,6 +1435,7 @@
 		7F709D3413BC98860008DBAD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				1918E9741BE0A15D002E3EA9 /* Launch Screen.storyboard */,
 				7FDF6E9813D8D4AD00B8CC4E /* Flag Images */,
 				7F709D6F13BCCB8B0008DBAD /* Images */,
 				7F709D3513BC98860008DBAD /* AppSales-Info.plist */,
@@ -2201,6 +2204,11 @@
 			isa = PBXProject;
 			attributes = {
 				LastUpgradeCheck = 0430;
+				TargetAttributes = {
+					7F709D2613BC98860008DBAD = {
+						DevelopmentTeam = 3G892ZFYS9;
+					};
+				};
 			};
 			buildConfigurationList = 7F709D2113BC98860008DBAD /* Build configuration list for PBXProject "AppSales" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -2368,6 +2376,7 @@
 				7FDF70FD13D8D4AE00B8CC4E /* do@2x.png in Resources */,
 				7FDF70FE13D8D4AE00B8CC4E /* dz.png in Resources */,
 				7FDF70FF13D8D4AE00B8CC4E /* dz@2x.png in Resources */,
+				1918E9751BE0A15D002E3EA9 /* Launch Screen.storyboard in Resources */,
 				7FDF710013D8D4AE00B8CC4E /* ec.png in Resources */,
 				7FDF710113D8D4AE00B8CC4E /* ec@2x.png in Resources */,
 				7FDF710213D8D4AE00B8CC4E /* ee.png in Resources */,
@@ -2898,7 +2907,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OtherSources/AppSales-Prefix.pch";
 				HEADER_SEARCH_PATHS = "";
@@ -2914,7 +2923,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "OtherSources/AppSales-Prefix.pch";
 				HEADER_SEARCH_PATHS = "";
