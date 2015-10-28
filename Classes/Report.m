@@ -135,6 +135,7 @@
 		BOOL isWeeklyReport = ![beginDate isEqual:endDate];
 		NSString *productName = [rowDictionary objectForKey:kReportColumnTitle];
 		if (!productName) productName = [rowDictionary objectForKey:kReportColumnTitle2];
+        productName = [productName stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		
 		Transaction *transaction = [NSEntityDescription insertNewObjectForEntityForName:@"Transaction" inManagedObjectContext:moc];
 		transaction.units = [NSNumber numberWithInteger:[[rowDictionary objectForKey:kReportColumnUnits] integerValue]];
@@ -153,6 +154,7 @@
 		[transaction setValue:[rowDictionary objectForKey:kReportColumnCountryCode] forKey:@"countryCode"];
 		NSString *productSKU = [rowDictionary objectForKey:kReportColumnSKU];
 		if (!productSKU) productSKU = [rowDictionary objectForKey:kReportColumnSKU2];
+        productSKU = [productSKU stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 		
 		NSString *productVersion = [rowDictionary objectForKey:kReportColumnVersion];
 		Product *product = [productsBySKU objectForKey:productSKU];
@@ -180,12 +182,16 @@
 		if (!platformsByTransactionType) {
 			platformsByTransactionType = [[NSDictionary alloc] initWithObjectsAndKeys:
 										  kProductPlatformiPhone, @"1",
+                                          kProductPlatformiPhone, @"3",
 										  kProductPlatformiPhone, @"7",
 										  kProductPlatformUniversal, @"1F",
+                                          kProductPlatformUniversal, @"3F",
 										  kProductPlatformUniversal, @"7F",
 										  kProductPlatformiPad, @"1T",
+                                          kProductPlatformiPad, @"3T",
 										  kProductPlatformiPad, @"7T",
 										  kProductPlatformMac, @"F1",
+                                          kProductPlatformMac, @"F3",
 										  kProductPlatformMac, @"F7",
 										  kProductPlatformInApp, @"IA1",
 										  kProductPlatformInApp, @"IA9",
